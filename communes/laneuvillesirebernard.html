@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Antennes à La Neuville-Sire-Bernard</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <header>
+        <h1>Antennes à La Neuville-Sire-Bernard</h1>
+        <a href="../index.html">Retour à l'accueil</a>
+    </header>
+    <h2>La Neuville-Sire-Bernard</h2>
+    <p>80595, Somme, Hauts-de-France</p>
+    <main>
+        <table>
+            <tr>
+                <th>ID Antenne</th>
+                <th>Opérateur</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>2G</th>
+                <th>3G</th>
+                <th>4G</th>
+                <th>5G</th>
+            </tr>
+            
+            <tr>
+                <td>0802750342</td>
+                <td>Bouygues Telecom</td>
+                <td>49.74562</td>
+                <td>2.51781</td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-red"></td>
+            </tr>
+        
+            <tr>
+                <td>0802700296</td>
+                <td>SFR</td>
+                <td>49.7454</td>
+                <td>2.51235</td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-red"></td>
+            </tr>
+        
+        </table>
+        <div id="map"></div>
+    </main>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="../js/colors.js"></script>
+        <script>
+        var antennes = [{'lat': '49.746268310487274', 'lon': '2.518319509488662', 'operator': 'Bouygues Telecom', 'id_antenne': '0802750342', 'deuxg': 'True', 'troisg': 'True', 'quatreg': 'True', 'cinqg': 'False'}, {'lat': '49.7459938990166', 'lon': '2.5130901054400843', 'operator': 'SFR', 'id_antenne': '0802700296', 'deuxg': 'True', 'troisg': 'True', 'quatreg': 'True', 'cinqg': 'False'}];
+
+        var map = L.map('map').setView([49.74562, 2.51781], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        antennes.forEach(function (antenne) {
+            if (antenne.operator === "Free Mobile") {
+                L.marker([antenne.lat, antenne.lon],{icon: redIcon}).addTo(map).bindPopup('Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg);
+            } else if (antenne.operator === "Orange") {
+                L.marker([antenne.lat, antenne.lon],{icon: orangeIcon}).addTo(map).bindPopup('Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg);
+            } else if (antenne.operator === "SFR") {
+                L.marker([antenne.lat, antenne.lon],{icon: greenIcon}).addTo(map).bindPopup('Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg);
+            } else if (antenne.operator === "Bouygues Telecom") {
+                L.marker([antenne.lat, antenne.lon],{icon: blueIcon}).addTo(map).bindPopup('Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg);
+            }
+        });
+    </script>
+    <footer>
+        Réalisé par Tristan BRINGUIER dans le cadre de la SAE15 à l'IUT de Villetaneuse
+    </footer>
+</body>
+</html>
+    

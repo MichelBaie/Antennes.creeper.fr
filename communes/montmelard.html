@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Antennes à Montmelard</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <header>
+        <h1>Antennes à Montmelard</h1>
+        <a href="../index.html">Retour à l'accueil</a>
+    </header>
+    <h2>Montmelard</h2>
+    <p>71316, Saône-et-Loire, Bourgogne-Franche-Comté</p>
+    <main>
+        <table>
+            <tr>
+                <th>ID Antenne</th>
+                <th>Opérateur</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>2G</th>
+                <th>3G</th>
+                <th>4G</th>
+                <th>5G</th>
+            </tr>
+            
+            <tr>
+                <td>0710990337</td>
+                <td>Free Mobile</td>
+                <td>46.33305</td>
+                <td>4.41</td>
+                <td class="frequence-red"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-red"></td>
+            </tr>
+        
+            <tr>
+                <td>0712750327</td>
+                <td>Bouygues Telecom</td>
+                <td>46.33305</td>
+                <td>4.41</td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-red"></td>
+            </tr>
+        
+            <tr>
+                <td>0712290212</td>
+                <td>Orange</td>
+                <td>46.33305</td>
+                <td>4.41</td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-red"></td>
+            </tr>
+        
+            <tr>
+                <td>0712700276</td>
+                <td>SFR</td>
+                <td>46.33305</td>
+                <td>4.41</td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-green"></td>
+                <td class="frequence-red"></td>
+            </tr>
+        
+        </table>
+        <div id="map"></div>
+    </main>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="../js/colors.js"></script>
+        <script>
+        var antennes = [{'lat': '46.33391229175847', 'lon': '4.410526920280333', 'operator': 'Free Mobile', 'id_antenne': '0710990337', 'deuxg': 'False', 'troisg': 'True', 'quatreg': 'True', 'cinqg': 'False'}, {'lat': '46.33390092675586', 'lon': '4.410517457531354', 'operator': 'Bouygues Telecom', 'id_antenne': '0712750327', 'deuxg': 'True', 'troisg': 'True', 'quatreg': 'True', 'cinqg': 'False'}, {'lat': '46.333626175246266', 'lon': '4.4105260640509405', 'operator': 'Orange', 'id_antenne': '0712290212', 'deuxg': 'True', 'troisg': 'True', 'quatreg': 'True', 'cinqg': 'False'}, {'lat': '46.33401266963225', 'lon': '4.410589720898475', 'operator': 'SFR', 'id_antenne': '0712700276', 'deuxg': 'True', 'troisg': 'True', 'quatreg': 'True', 'cinqg': 'False'}];
+
+        var map = L.map('map').setView([46.33305, 4.41], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        antennes.forEach(function (antenne) {
+            if (antenne.operator === "Free Mobile") {
+                L.marker([antenne.lat, antenne.lon],{icon: redIcon}).addTo(map).bindPopup('Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg);
+            } else if (antenne.operator === "Orange") {
+                L.marker([antenne.lat, antenne.lon],{icon: orangeIcon}).addTo(map).bindPopup('Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg);
+            } else if (antenne.operator === "SFR") {
+                L.marker([antenne.lat, antenne.lon],{icon: greenIcon}).addTo(map).bindPopup('Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg);
+            } else if (antenne.operator === "Bouygues Telecom") {
+                L.marker([antenne.lat, antenne.lon],{icon: blueIcon}).addTo(map).bindPopup('Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg);
+            }
+        });
+    </script>
+    <footer>
+        Réalisé par Tristan BRINGUIER dans le cadre de la SAE15 à l'IUT de Villetaneuse
+    </footer>
+</body>
+</html>
+    
