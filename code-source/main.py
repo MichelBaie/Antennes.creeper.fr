@@ -23,7 +23,6 @@ for ligne in dico_data_operateurs:
     antenne["région"]=ligne["nom_reg"]
     antenne["département"]=ligne["nom_dep"]
     antenne["commune"]=ligne["nom_com"]
-    antenne["code_postal"]=ligne["insee_com"]
     antenne["f_2g"]=bool(int(ligne["site_2g"]))
     antenne["f_3g"]=bool(int(ligne["site_3g"]))
     antenne["f_4g"]=bool(int(ligne["site_4g"]))

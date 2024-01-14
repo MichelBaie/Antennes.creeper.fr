@@ -60,7 +60,6 @@ def composition_str_antennes(liste_antennes):
 def generate_commune_html(liste_antennes):
     random.shuffle(liste_antennes)
     commune=liste_antennes[0]["commune"]
-    code_postal=liste_antennes[0]["code_postal"]
     région=liste_antennes[0]["région"]
     département=liste_antennes[0]["département"]
     liste_antennes_html=composition_str_antennes(liste_antennes)
@@ -80,7 +79,7 @@ def generate_commune_html(liste_antennes):
         <a href="../index.html">Retour à l'accueil</a>
     </header>
     <h2>{commune}</h2>
-    <p>{code_postal}, {département}, {région}</p>
+    <p>{département}, {région}</p>
     <main>
         <table>
             <tr>
@@ -101,7 +100,7 @@ def generate_commune_html(liste_antennes):
     <script src="../js/colors.js"></script>
     {script_map}
     <footer>
-        Réalisé par Tristan BRINGUIER dans le cadre de la SAE15 à l'IUT de Villetaneuse
+        Réalisé par Tristan BRINGUIER dans le cadre de la SAE15 (BUT R&T) à l'IUT de Villetaneuse.
     </footer>
 </body>
 </html>
