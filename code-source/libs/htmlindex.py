@@ -38,7 +38,7 @@ def generate_index_html(liste_communes,nb_antennes_communes,Nb_antenne_free,Nb_a
         <br>
         Ce site permet de naviguer entre les communes et voir où se situent précisément les antennes ainsi qu'à quel opérateur elles appartiennent.
         <br>
-        Le dataset est disponible au lieu suivant (extrait de data.gouv.fr) : https://files.data.gouv.fr/arcep_donnees/mobile/sites/last/
+        Le dataset est disponible au lieu suivant (extrait de data.gouv.fr) : https://data.arcep.fr/mobile/sites/last/
         </p>
         <input type="text" id="searchInput" placeholder="Filtrer les communes..." onkeyup="filterCommunes()">
         

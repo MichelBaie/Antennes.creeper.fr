@@ -7,8 +7,8 @@ from libs.htmlindex import generate_index_html
 from libs.clearchar import nettoyer_chaine
 from libs.generatebasefiles import generate_css_js
 
-data_operateurs_brut=open("dataset/2023_T3_sites_Metropole.csv",'r',encoding='utf-8') # Ouverture du dataset
-dico_data_operateurs=csv.DictReader(data_operateurs_brut) # Traitement du dataset avec DictReader
+data_operateurs_brut=open("dataset/2024_T4_sites_Metropole.csv",'r',encoding='utf-8') # Ouverture du dataset
+dico_data_operateurs=csv.DictReader(data_operateurs_brut, delimiter=';') # Traitement du dataset avec DictReader
 
 Liste_Antennes = [] # Création d'une liste qui contiendras chaque antenne
 

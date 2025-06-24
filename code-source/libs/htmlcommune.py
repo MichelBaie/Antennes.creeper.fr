@@ -1,44 +1,78 @@
+# libs/htmlcommune.py
+
 import random
+import json # On importe le module json pour une conversion propre vers JavaScript
 
 def fabrication_str_map(liste_antennes):
-    liste_html = []
+    liste_marqueurs = []
     for antenne in liste_antennes:
-        dico={}
-        dico["lat"]=str(float(antenne["latitude"])+random.uniform(0.0005, 0.001))
-        dico["lon"]=str(float(antenne["longitude"])+random.uniform(0.0005, 0.001))
-        dico["operator"]=antenne["opérateur"]
-        dico["id_antenne"]=antenne["id_station"]
-        dico["deuxg"]=str(antenne["f_2g"])
-        dico["troisg"]=str(antenne["f_3g"])
-        dico["quatreg"]=str(antenne["f_4g"])
-        dico["cinqg"]=str(antenne["f_5g"])
-        liste_html.append(dico)
-    str_liste_html=str(liste_html)
-    first_lat=liste_antennes[0]["latitude"]
-    first_long=liste_antennes[0]["longitude"]
-    tag=f"""'Opérateur: ' + antenne.operator + '<br>ID Antenne: ' + antenne.id_antenne + '<br>2G: ' + antenne.deuxg + '<br>3G: ' + antenne.troisg + '<br>4G: ' + antenne.quatreg + '<br>5G: ' + antenne.cinqg"""
-    str_html=f"""    <script>
-        var antennes = {str_liste_html};
+        # CORRECTION : Remplacer la virgule par un point avant la conversion en float
+        try:
+            lat_str = antenne["latitude"].replace(',', '.')
+            lon_str = antenne["longitude"].replace(',', '.')
+            
+            # Ajout d'un petit décalage aléatoire pour éviter que les points se superposent parfaitement
+            lat = float(lat_str) + random.uniform(-0.0005, 0.0005)
+            lon = float(lon_str) + random.uniform(-0.0005, 0.0005)
 
-        var map = L.map('map').setView([{first_lat}, {first_long}], 12);
+        except (ValueError, TypeError):
+            # Si les coordonnées sont invalides, on ignore cette antenne pour la carte
+            continue 
+
+        # Ce dictionnaire sera converti en objet JavaScript
+        marqueur = {
+            "lat": lat,
+            "lon": lon,
+            "operator": antenne["opérateur"],
+            "popup": (
+                f"<b>Opérateur:</b> {antenne['opérateur']}<br>"
+                f"<b>ID Antenne:</b> {antenne['id_station']}<br>"
+                f"<b>2G:</b> {'Oui' if antenne['f_2g'] else 'Non'}<br>"
+                f"<b>3G:</b> {'Oui' if antenne['f_3g'] else 'Non'}<br>"
+                f"<b>4G:</b> {'Oui' if antenne['f_4g'] else 'Non'}<br>"
+                f"<b>5G:</b> {'Oui' if antenne['f_5g'] else 'Non'}"
+            )
+        }
+        liste_marqueurs.append(marqueur)
+        
+    if not liste_marqueurs:
+        return "<!-- Aucune antenne avec des coordonnées valides à afficher sur la carte. -->"
+    
+    # CORRECTION : On s'assure aussi de remplacer la virgule pour le centrage de la carte
+    first_lat = liste_marqueurs[0]["lat"]
+    first_long = liste_marqueurs[0]["lon"]
+
+    # OPTIMISATION : On utilise json.dumps pour créer une chaîne JSON valide, beaucoup plus sûr que str()
+    str_liste_marqueurs_json = json.dumps(liste_marqueurs, indent=4) # indent pour la lisibilité
+    
+    # Le code JavaScript pour générer la carte et les marqueurs
+    str_html=f"""    <script>
+        var antennes = {str_liste_marqueurs_json};
+
+        var map = L.map('map').setView([{first_lat}, {first_long}], 13);
 
         L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
             attribution: '© OpenStreetMap contributors'
         }}).addTo(map);
 
         antennes.forEach(function (antenne) {{
+            let icon;
             if (antenne.operator === "Free Mobile") {{
-                L.marker([antenne.lat, antenne.lon],{{icon: redIcon}}).addTo(map).bindPopup({tag});
+                icon = redIcon;
             }} else if (antenne.operator === "Orange") {{
-                L.marker([antenne.lat, antenne.lon],{{icon: orangeIcon}}).addTo(map).bindPopup({tag});
+                icon = orangeIcon;
             }} else if (antenne.operator === "SFR") {{
-                L.marker([antenne.lat, antenne.lon],{{icon: greenIcon}}).addTo(map).bindPopup({tag});
+                icon = greenIcon;
             }} else if (antenne.operator === "Bouygues Telecom") {{
-                L.marker([antenne.lat, antenne.lon],{{icon: blueIcon}}).addTo(map).bindPopup({tag});
+                icon = blueIcon;
+            }} else {{
+                icon = L.Icon.Default(); // Une icône par défaut si l'opérateur n'est pas reconnu
             }}
+            L.marker([antenne.lat, antenne.lon], {{icon: icon}}).addTo(map).bindPopup(antenne.popup);
         }});
     </script>"""
     return str_html
+
 def composition_str_antennes(liste_antennes):
     str_html=""
     for antenne in liste_antennes:
@@ -58,6 +92,9 @@ def composition_str_antennes(liste_antennes):
     return str_html
 
 def generate_commune_html(liste_antennes):
+    if not liste_antennes:
+        return "<html><body>Erreur: Aucune antenne trouvée pour cette commune.</body></html>"
+        
     random.shuffle(liste_antennes)
     commune=liste_antennes[0]["commune"]
     région=liste_antennes[0]["région"]
@@ -82,17 +119,21 @@ def generate_commune_html(liste_antennes):
     <p>{département}, {région}</p>
     <main>
         <table>
-            <tr>
-                <th>ID Antenne</th>
-                <th>Opérateur</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>2G</th>
-                <th>3G</th>
-                <th>4G</th>
-                <th>5G</th>
-            </tr>
-            {liste_antennes_html}
+            <thead>
+                <tr>
+                    <th>ID Antenne</th>
+                    <th>Opérateur</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>2G</th>
+                    <th>3G</th>
+                    <th>4G</th>
+                    <th>5G</th>
+                </tr>
+            </thead>
+            <tbody>
+                {liste_antennes_html}
+            </tbody>
         </table>
         <div id="map"></div>
     </main>
